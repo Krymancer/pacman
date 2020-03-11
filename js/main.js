@@ -1,31 +1,19 @@
+import { clear, init } from './controller.js'
+import { getAction } from './keyboard.js'
 
-import { clear, init, getAction } from './controller.js';
+const { ghosts, map, player, update, show } = init();
 
-const { ghosts, map, player } = init();
 let action;
 
 document.addEventListener("keydown", (event) => {
-    action = getAction(event,player,map);
+    action = getAction(event, player, map);
 });
 
-update();
+main();
 
-function update() {
+function main() {
     clear();
-
-    ghosts.forEach(ghost => {
-        ghost.update();
-    });
-
-    player.update(action,map);
-
-    map.show();
-
-    ghosts.forEach(ghost => {
-        ghost.show();
-    });
-
-    player.show();
-
-    requestAnimationFrame(update);
+    update(ghosts, player, map, action);
+    show(ghosts, player, map);
+    requestAnimationFrame(main);
 }

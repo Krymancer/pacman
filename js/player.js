@@ -1,4 +1,4 @@
-import { checkAction, move } from './controller.js';
+import { checkAction } from './keyboard.js';
 
 export default class Player {
     constructor(context, sprites, position = { x: 10, y: 56 }) {
@@ -19,7 +19,7 @@ export default class Player {
         this.tickPerFrame = 10;
 
         this.actionTickCount = 0;
-        this.tickPerAction = 5;
+        this.tickPerAction = 2;
 
         this.velocity = 16;
 

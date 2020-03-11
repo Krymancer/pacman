@@ -8,84 +8,36 @@ const context = canvas.getContext('2d');
 const sprites = new Image();
 const mapSprite = new Image();
 
-function move(event) {
-    const key = event.code;
-    if (key === 'ArrowUp') {
-        return 'UP';
-    } else if (key === 'ArrowDown') {
-        return 'DOWN';
-    } else if (key === 'ArrowLeft') {
-        return 'LEFT';
-    } else if (key === 'ArrowRight') {
-        return 'RIGHT';
-    } else {
-        return 'INVALID';
-    }
-
-}
-
 function init() {
     sprites.src = 'assets/sprites.png';
     mapSprite.src = 'assets/map.png';
 
-    return { 
+    return {
         ghosts: getGhots(),
         map: getMap(),
-        player: getPlayer()
+        player: getPlayer(),
+        update: update,
+        show: show
     }
 }
 
-function getAction(event,player,map){
-    let direction = move(event);
-    let valid = checkAction(direction, player, map);
+function update(ghosts, player, map, action) {
+    ghosts.forEach(ghost => {
+        ghost.update();
+    });
 
-    return {
-        'direction': direction,
-        'valid': valid
-    }
+    player.update(action, map);
 }
 
-function checkAction(direction, player, map) {
+function show(ghosts, player, map) {
+    map.show();
 
-    function map_range(value, low1, high1, low2, high2) {
-        return Math.round(low2 + (high2 - low2) * (value - low1) / (high1 - low1));
-    }
+    ghosts.forEach(ghost => {
+        ghost.show();
+    });
 
-    let i = map_range(player.position.y, 40, 520, 0, 30);
-    let j = map_range(player.position.x, 0, 430, 0, 27);
+    player.show();
 
-    switch (direction) {
-        case 'UP': {
-            if (map.map[i - 1][j] === map.status['WALL']) {
-                return false;
-            }
-            break;
-        }
-        case 'DOWN': {
-            if (map.map[i + 1][j] === map.status['WALL']) {
-                return false;
-            }
-            break;
-        }
-        case 'LEFT': {
-            if (map.map[i][j - 1] === map.status['WALL']) {
-                return false;
-            }
-            break;
-        }
-        case 'RIGHT': {
-            if (map.map[i][j + 1] === map.status['WALL']) {
-                return false;
-            }
-            break;
-        }
-        case 'INVALID': {
-            return false;
-            break;
-        }
-    }
-
-    return true;
 }
 
 function getGhots() {
@@ -110,4 +62,4 @@ function clear() {
     context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-export { move, getGhots, getPlayer, getMap, clear, init, checkAction, getAction };
+export { clear, init };
