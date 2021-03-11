@@ -1,7 +1,7 @@
 import { checkAction } from './keyboard.js';
 
 export default class Player {
-    constructor(context, sprites, position = { x: 10, y: 56 }) {
+    constructor(context, sprites, position = { x: 20, y: 56 }) {
         this.context = context;
         this.sprites = sprites;
 
@@ -19,7 +19,7 @@ export default class Player {
         this.tickPerFrame = 10;
 
         this.actionTickCount = 0;
-        this.tickPerAction = 2;
+        this.tickPerAction = 4;
 
         this.velocity = 16;
 
@@ -41,13 +41,19 @@ export default class Player {
         }
 
         this.actionTickCount++;
+        
         if (this.actionTickCount > this.tickPerAction) {
             this.actionTickCount = 0;
+
             if (action) {
                 if (action['valid']) {
                     this.move(action);
+                    action['valid'] = checkAction(action['direction'], this, map);
+                }else{
+                    if(checkAction(this.status, this, map)){
+                        this.move({direction: this.status});
+                    }
                 }
-                action['valid'] = checkAction(action['direction'], this, map);
             }
         }
 

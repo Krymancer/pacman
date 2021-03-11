@@ -3,7 +3,7 @@ import { getAction } from './keyboard.js'
 
 const { ghosts, map, player, update, show } = init();
 
-let action;
+let action = {direction: "RIGHT", valid: true};
 
 document.addEventListener("keydown", (event) => {
     action = getAction(event, player, map);
